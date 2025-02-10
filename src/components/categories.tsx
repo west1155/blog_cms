@@ -9,5 +9,3 @@ export const Categories = ({className}: PropsType) => {
         category
     </div>
 }
-
-
