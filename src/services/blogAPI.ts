@@ -42,13 +42,3 @@ export const getPosts = async (): Promise<GetPostsResponse> => {
 
     return await request(graphqlAPI, query)
 };
-
-export const logPosts = async () => {
-    try {
-        const result = await getPosts();
-        console.log(result.postsConnection.edges)
-        return result.postsConnection.edges
-    } catch (error) {
-        console.error('Error fetching posts:', error);
-    }
-};
