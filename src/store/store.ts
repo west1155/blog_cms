@@ -1,32 +1,68 @@
-// usePostsStore.ts
-import {create} from 'zustand';
-import { GetPostsResponse, PostEdge } from '@/services/types';
-import { getPosts } from '../services/blogAPI';
+import { create } from 'zustand';
+import {
+    Category,
+    Post
+} from '@/types';
+import { getPosts, getPostDetails, getRecentPosts, getSimilarPosts } from '@/services/blogAPI';
+
+export interface WidgetPost {
+    title: string;
+    featuredImage: { url: string };
+    createdAt: string;
+    slug: string;
+}
 
 interface PostsState {
-    posts: PostEdge[];
+    posts: Post[];
+    postDetails: Post | null;
+    widgetPosts: WidgetPost[];
     loading: boolean;
     error: string | null;
     fetchPosts: () => Promise<void>;
+    fetchPostDetails: (slug: string) => Promise<void>;
+    fetchWidgetPosts: (categories?: Category[], slug?: string) => Promise<void>;
 }
 
 export const usePostsStore = create<PostsState>((set) => ({
     posts: [],
+    postDetails: null,
+    widgetPosts: [],
     loading: false,
     error: null,
+
     fetchPosts: async () => {
-        // Start loading and reset any previous error.
         set({ loading: true, error: null });
         try {
-            // Call your getPosts function to fetch data.
-            const data: GetPostsResponse = await getPosts();
-            // Extract the posts edges from the response.
-            const posts: PostEdge[] = data.postsConnection.edges;
-            // Update state with the posts and mark loading as false.
-            set({ posts, loading: false });
+            const data = await getPosts();
+            set({ posts: data.postsConnection.edges.map(edge => edge.node), loading: false });
         } catch (error: any) {
-            // Update state with the error message.
             set({ error: error.message || 'Error fetching posts', loading: false });
+        }
+    },
+
+    fetchPostDetails: async (slug: string) => {
+        set({ loading: true, error: null });
+        try {
+            const data = await getPostDetails(slug);
+            set({ postDetails: data.post, loading: false });
+        } catch (error: any) {
+            set({ error: error.message || 'Error fetching post details', loading: false });
+        }
+    },
+
+    fetchWidgetPosts: async (categories?: Category[], slug?: string) => {
+        set({ loading: true, error: null });
+        try {
+            let posts: WidgetPost[];
+            if (slug && categories) {
+                posts = await getSimilarPosts(categories, slug);
+            } else {
+                const data = await getRecentPosts();
+                posts = data.posts;
+            }
+            set({ widgetPosts: posts, loading: false });
+        } catch (error: any) {
+            set({ error: error.message || 'Error fetching widget posts', loading: false });
         }
     },
 }));
