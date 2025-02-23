@@ -58,3 +58,11 @@ export interface GetAdjacentPostsResponse {
     previous: Post[];
     next: Post[];
 }
+
+export type PostsConnection = {
+    edges: PostEdge[];
+};
+
+export type GetPostsResponse = {
+    postsConnection: PostsConnection;
+};

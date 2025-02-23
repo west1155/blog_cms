@@ -3,7 +3,7 @@ import {
     Category,
     Post
 } from '@/types';
-import { getPosts, getPostDetails, getRecentPosts, getSimilarPosts } from '@/services/blogAPI';
+import {getPosts} from "@/services/blogAPI";
 
 export interface WidgetPost {
     title: string;

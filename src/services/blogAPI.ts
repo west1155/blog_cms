@@ -9,7 +9,45 @@ import {Post} from "@/types";
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
-// Existing getPosts, getPostDetails, getRecentPosts, and getSimilarPosts...
+export const getPosts = async (): Promise<getPostsResponse> => {
+    const query = gql`
+        query MyQuery {
+            postsConnection {
+                edges {
+                    node {
+                        author {
+                            bio
+                            id
+                            name
+                            photo {
+                                url
+                            }
+                            post {
+                                id
+                            }
+                        }
+                        createdAt
+                        slug
+                        title
+                        excerpt
+                        featuredImage {
+                            url
+                        }
+                        category {
+                            name
+                            slug
+                        }
+                    }
+                }
+            }
+        }`;
+
+    if (!graphqlAPI) {
+        throw new Error('GraphQL API endpoint is not defined');
+    }
+
+    return await request(graphqlAPI, query)
+};
 
 export const getCategories = async (): Promise<Category[]> => {
     const query = gql`
