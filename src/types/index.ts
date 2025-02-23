@@ -44,6 +44,10 @@ export interface GetCategoriesResponse {
     categories: Category[];
 }
 
+
+export interface GetPostDetailsResponse {
+    post: Post;
+}
 export interface GetCommentsResponse {
     comments: Comment[];
 }
@@ -59,6 +63,24 @@ export interface GetAdjacentPostsResponse {
     next: Post[];
 }
 
+export type PostNode = {
+    id: string;
+    author: Author;
+    createdAt: string;
+    slug: string;
+    title: string;
+    excerpt: string;
+    featuredImage: {
+        url: string;
+    };
+    categories: Category[];
+};
+
+export type PostEdge = {
+    cursor: string;
+    node: PostNode;
+};
+
 export type PostsConnection = {
     edges: PostEdge[];
 };
@@ -66,3 +88,24 @@ export type PostsConnection = {
 export type GetPostsResponse = {
     postsConnection: PostsConnection;
 };
+
+
+export interface PostDetails {
+    id: string;
+    title: string;
+    content: {
+        raw: {
+            children: any[];
+        };
+    };
+    excerpt: string;
+    createdAt: string;
+    author: Author;
+    featuredImage: {
+        url: string;
+    };
+    category: {
+        name: string;
+        slug: string;
+    };
+}

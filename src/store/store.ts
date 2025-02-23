@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import {
     Category,
-    Post
+    Post, PostEdge
 } from '@/types';
-import {getPosts} from "@/services/blogAPI";
+import {getPostDetails, getPosts} from "@/services/blogAPI";
 
 export interface WidgetPost {
     title: string;
@@ -13,7 +13,7 @@ export interface WidgetPost {
 }
 
 interface PostsState {
-    posts: Post[];
+    posts: PostEdge[],
     postDetails: Post | null;
     widgetPosts: WidgetPost[];
     loading: boolean;
@@ -34,9 +34,13 @@ export const usePostsStore = create<PostsState>((set) => ({
         set({ loading: true, error: null });
         try {
             const data = await getPosts();
-            set({ posts: data.postsConnection.edges.map(edge => edge.node), loading: false });
-        } catch (error: any) {
-            set({ error: error.message || 'Error fetching posts', loading: false });
+            set({ posts: data.postsConnection.edges, loading: false });
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                set({ error: error.message || 'Error fetching posts', loading: false });
+            } else {
+                set({error: 'Error fetching posts', loading: false});
+            }
         }
     },
 
@@ -45,8 +49,12 @@ export const usePostsStore = create<PostsState>((set) => ({
         try {
             const data = await getPostDetails(slug);
             set({ postDetails: data.post, loading: false });
-        } catch (error: any) {
-            set({ error: error.message || 'Error fetching post details', loading: false });
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                set({ error: error.message || 'Error fetching post details', loading: false });
+            } else {
+                set({ error: 'Error fetching post details', loading: false });
+            }
         }
     },
 
