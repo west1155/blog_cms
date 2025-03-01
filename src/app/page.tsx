@@ -5,12 +5,13 @@ import {usePostsStore} from "@/store/store";
 import {PostCard} from "@/components";
 
 export default function Home() {
-    const {posts, loading, error, fetchPosts} = usePostsStore();
+    const {posts, recentPosts, loading, error, fetchPosts, fetchRecentPosts} = usePostsStore();
 
 
     useEffect(() => {
         fetchPosts();
-    }, [fetchPosts]);
+        fetchRecentPosts();
+    }, [fetchPosts, fetchRecentPosts]);
 
 
     if (loading) return <div>Loading posts...</div>;
@@ -26,10 +27,11 @@ export default function Home() {
                         <PostCard key={index} post={edge.node}/>
                     ))}
                 </div>
-            </div>
 
-            <div className="lg:col-span-4 col-span-1">
-                <div className="lg:sticky relative top-8">
+                <div className="lg:col-span-4 col-span-1">
+                    <div className="lg:sticky relative top-8">
+                        <p>{recentPosts.length}</p>
+                    </div>
                 </div>
             </div>
         </div>

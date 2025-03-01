@@ -36,3 +36,39 @@ export type PostsConnection = {
 export type GetPostsResponse = {
     postsConnection: PostsConnection;
 };
+
+export type PostDetail = {
+    title: string;
+    excerpt: string;
+    featuredImage: {
+        url: string;
+    };
+    author: {
+        name: string;
+        bio: string;
+        photo: {
+            url: string;
+        };
+    };
+    createdAt: string;
+    slug: string;
+    content: any;
+    categories: Category[];
+};
+
+export type GetPostDetailResponse = {
+    post: PostDetail;
+};
+
+export type RecentPost = {
+    title: string;
+    featuredImage: {
+        url: string;
+    };
+    createdAt: string;
+    slug: string;
+};
+
+export type GetRecentPostsResponse = {
+    posts: RecentPost[];
+};

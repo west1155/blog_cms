@@ -1,32 +1,45 @@
-// usePostsStore.ts
 import {create} from 'zustand';
-import { GetPostsResponse, PostEdge } from '@/services/types';
-import { getPosts } from '../services/blogAPI';
+import {GetPostsResponse, PostEdge, RecentPost} from '@/services/types';
+import {getPosts, getRecentPosts} from '@/services/blogAPI';
+
 
 interface PostsState {
     posts: PostEdge[];
+    recentPosts: RecentPost[];
     loading: boolean;
+    recentPostsLoading: boolean;
     error: string | null;
+    recentPostsError: string | null;
     fetchPosts: () => Promise<void>;
+    fetchRecentPosts: () => Promise<void>;
 }
-
 export const usePostsStore = create<PostsState>((set) => ({
     posts: [],
+    recentPosts: [],
     loading: false,
     error: null,
+    recentPostsLoading: false,
+    recentPostsError: null,
     fetchPosts: async () => {
-        // Start loading and reset any previous error.
         set({ loading: true, error: null });
         try {
-            // Call your getPosts function to fetch data.
             const data: GetPostsResponse = await getPosts();
-            // Extract the posts edges from the response.
             const posts: PostEdge[] = data.postsConnection.edges;
-            // Update state with the posts and mark loading as false.
             set({ posts, loading: false });
         } catch (error: any) {
-            // Update state with the error message.
             set({ error: error.message || 'Error fetching posts', loading: false });
+        }
+    },
+    fetchRecentPosts: async () => {
+        set({ recentPostsLoading: true, recentPostsError: null });
+        try {
+            const recentPosts: RecentPost[] = await getRecentPosts();
+            set({ recentPosts, recentPostsLoading: false });
+        } catch (error: any) {
+            set({
+                recentPostsError: error.message || 'Error fetching recent posts',
+                recentPostsLoading: false
+            });
         }
     },
 }));
