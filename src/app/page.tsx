@@ -1,28 +1,23 @@
 'use client';
 
-import {useEffect} from 'react';
-import {usePostsStore} from "@/store/store";
-import {PostCard, PostWidget} from "@/components";
+import { useEffect } from 'react';
+import { usePostsStore } from "@/store/store";
+import { PostCard, PostWidget, Categories } from "@/components";
 
 export default function Home() {
     const {
         posts,
-        recentPosts,
         loading,
         error,
-        fetchPosts,
-        fetchRecentPosts} = usePostsStore();
-
+        fetchPosts
+    } = usePostsStore();
 
     useEffect(() => {
         fetchPosts();
-        fetchRecentPosts();
-    }, [fetchPosts, fetchRecentPosts]);
+    }, [fetchPosts]);
 
-
-    if (loading) return <div>Loading posts...</div>;
-    if (error) return <div>Error: {error}</div>;
-
+    if (loading) return <div className="container mx-auto px-10">Loading posts...</div>;
+    if (error) return <div className="container mx-auto px-10">Error: {error}</div>;
 
     return (
         <div className="container mx-auto px-10 mb-8">
@@ -35,7 +30,8 @@ export default function Home() {
 
                 <div className="lg:col-span-4 col-span-1">
                     <div className="lg:sticky relative top-8">
-                        <PostWidget relatedPosts={recentPosts}/>
+                        <PostWidget />
+                        <Categories />
                     </div>
                 </div>
             </div>

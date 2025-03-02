@@ -2,9 +2,9 @@ import {gql, request} from 'graphql-request';
 import {
   GetPostDetailResponse,
   GetPostsResponse,
-  GetRecentPostsResponse,
+  GetRecentPostsResponse, GetSimilarPostsResponse,
   PostDetail,
-  RecentPost
+  RecentPost, RelatedPost
 } from "@/services/types";
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
@@ -108,5 +108,30 @@ export const getRecentPosts = async (): Promise<RecentPost[]> => {
   }
 
   const result: GetRecentPostsResponse = await request(graphqlAPI, query);
+  return result.posts;
+};
+
+export const getSimilarPosts = async (categories: string[], slug: string): Promise<RelatedPost[]> => {
+  const query = gql`
+    query GetPostDetails($slug: String!, $categories: [String!]) {
+      posts(
+        where: {slug_not: $slug, AND: {categories_some: {slug_in: $categories}}}
+        last: 3
+      ) {
+        title
+        featuredImage {
+          url
+        }
+        createdAt
+        slug
+      }
+    }
+  `;
+
+  if (!graphqlAPI) {
+    throw new Error('GraphQL API endpoint is not defined');
+  }
+
+  const result: GetSimilarPostsResponse = await request(graphqlAPI, query, { slug, categories });
   return result.posts;
 };

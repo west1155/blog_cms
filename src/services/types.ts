@@ -56,6 +56,16 @@ export type PostDetail = {
     categories: Category[];
 };
 
+
+export type RelatedPost = {
+    title: string;
+    featuredImage: {
+        url: string;
+    };
+    createdAt: string;
+    slug: string;
+};
+
 export type GetPostDetailResponse = {
     post: PostDetail;
 };
@@ -71,4 +81,8 @@ export type RecentPost = {
 
 export type GetRecentPostsResponse = {
     posts: RecentPost[];
+};
+
+export type GetSimilarPostsResponse = {
+    posts: RelatedPost[];
 };
