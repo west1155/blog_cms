@@ -2,10 +2,16 @@
 
 import {useEffect} from 'react';
 import {usePostsStore} from "@/store/store";
-import {PostCard} from "@/components";
+import {PostCard, PostWidget} from "@/components";
 
 export default function Home() {
-    const {posts, recentPosts, loading, error, fetchPosts, fetchRecentPosts} = usePostsStore();
+    const {
+        posts,
+        recentPosts,
+        loading,
+        error,
+        fetchPosts,
+        fetchRecentPosts} = usePostsStore();
 
 
     useEffect(() => {
@@ -17,7 +23,6 @@ export default function Home() {
     if (loading) return <div>Loading posts...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    console.log(posts);
 
     return (
         <div className="container mx-auto px-10 mb-8">
@@ -30,7 +35,7 @@ export default function Home() {
 
                 <div className="lg:col-span-4 col-span-1">
                     <div className="lg:sticky relative top-8">
-                        <p>{recentPosts.length}</p>
+                        <PostWidget relatedPosts={recentPosts}/>
                     </div>
                 </div>
             </div>
