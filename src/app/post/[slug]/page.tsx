@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { GetStaticProps, GetStaticPaths } from 'next';
-import { ParsedUrlQuery } from 'querystring';
 import {
     PostDetail,
     Categories,
@@ -9,26 +8,42 @@ import {
     Author,
     Comments,
     CommentsForm,
-    Loader
 } from '@/components';
-import { getPosts, getPostDetails } from '@/services/blogAPI';
+import { getPostDetails, getPosts } from '@/services/blogAPI';
 import { AdjacentPosts } from '../../sections';
-import { PostDetail as PostDetailType } from '@/services/types';
+import { PostDetailType, PostNode } from '@/services/types';
 
 interface PostDetailsProps {
     post: PostDetailType;
-}
-
-interface IParams extends ParsedUrlQuery {
-    slug: string;
 }
 
 const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
     const router = useRouter();
 
     if (router.isFallback) {
-        return <Loader />;
+        return <div>Loading ...</div>;
     }
+
+    export const getStaticProps: GetStaticProps = async ({ params }) => {
+        const data = await getPostDetails(params?.slug as string);
+
+        return {
+            props: {
+                post: data,
+            },
+        };
+    };
+
+    export const getStaticPaths: GetStaticPaths = async () => {
+        const posts = await getPosts();
+
+        return {
+            paths: posts.postsConnection.edges.map(({ node }: { node: PostNode }) => ({
+                params: { slug: node.slug }
+            })),
+            fallback: true,
+        };
+    };
 
     return (
         <>
@@ -57,25 +72,3 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
 };
 
 export default PostDetails;
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const { slug } = params as IParams;
-    const data = await getPostDetails(slug);
-
-    return {
-        props: {
-            post: data,
-        },
-    };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-    const posts = await getPosts();
-
-    return {
-        paths: posts.postsConnection.edges.map(({ node }) => ({
-            params: { slug: node.slug }
-        })),
-        fallback: true,
-    };
-};

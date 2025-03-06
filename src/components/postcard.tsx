@@ -26,7 +26,7 @@ export const PostCard = ({post}: { post: Post }) => (
         </div>
 
         <h1 className="transition duration-500 text-center mb-8 cursor-pointer hover:text-pink-600 text-3xl font-semibold">
-            <Link href={`/post/${post.slug}`}>{post.title}</Link>
+            <Link href={`/src/app/post/${post.slug}`}>{post.title}</Link>
         </h1>
         <div className="block lg:flex text-center items-center justify-center mb-8 w-full">
             <div className="flex justify-center mb-4 lg:mb-0 w-full lg:w-auto mr-8 items-center">

@@ -37,7 +37,7 @@ export type GetPostsResponse = {
     postsConnection: PostsConnection;
 };
 
-export type PostDetail = {
+export type PostDetailType = {
     title: string;
     excerpt: string;
     featuredImage: {
@@ -67,7 +67,7 @@ export type RelatedPost = {
 };
 
 export type GetPostDetailResponse = {
-    post: PostDetail;
+    post: PostDetailType;
 };
 
 export type RecentPost = {

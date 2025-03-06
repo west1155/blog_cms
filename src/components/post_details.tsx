@@ -5,9 +5,9 @@ import { Categories, PostWidget, PostCard} from '@/components';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getPostDetails } from '@/services/blogAPI';
-import { PostDetail as PostDetailType } from '@/services/types';
+import {PostDetailType } from '@/services/types';
 
-export default function PostDetailPage() {
+export function PostDetailPage() {
     const params = useParams();
     const slug = params.slug as string;
 

@@ -2,8 +2,7 @@ import {gql, request} from 'graphql-request';
 import {
   GetPostDetailResponse,
   GetPostsResponse,
-  GetRecentPostsResponse, GetSimilarPostsResponse,
-  PostDetail,
+  GetRecentPostsResponse, GetSimilarPostsResponse, PostDetailType,
   RecentPost, RelatedPost
 } from "@/services/types";
 
@@ -49,7 +48,7 @@ export const getPosts = async (): Promise<GetPostsResponse> => {
     return await request(graphqlAPI, query)
 };
 
-export const getPostDetails = async (slug: string): Promise<PostDetail> => {
+export const getPostDetails = async (slug: string): Promise<PostDetailType> => {
   const query = gql`
     query GetPostDetails($slug: String!) {
       post(where: {slug: $slug}) {
