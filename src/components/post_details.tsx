@@ -1,11 +1,13 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { Categories, PostWidget, PostCard} from '@/components';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { getPostDetails } from '@/services/blogAPI';
-import {PostDetailType } from '@/services/types';
+import { useParams } from "next/navigation";
+import { Categories } from "./categories";
+import { PostContent } from "./post_content";
+import { PostWidget } from "./post_widget";
+import {useEffect, useState } from "react";
+import { PostDetailType } from "@/services/types";
+import {getPostDetails} from "@/services/blogAPI";
+import {Author} from "@/components/author";
 
 export function PostDetailPage() {
     const params = useParams();
@@ -38,14 +40,15 @@ export function PostDetailPage() {
     if (error) return <div className="container mx-auto px-10">Error: {error}</div>;
     if (!post) return <div className="container mx-auto px-10">Post not found</div>;
 
-
     const categorySlugArray = post.categories.map(category => category.slug);
 
     return (
         <div className="container mx-auto px-10 mb-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                 <div className="col-span-1 lg:col-span-8">
-                    <PostCard post={post} />
+                    <PostContent post={post} />
+                    <Author author={post.author} />
+                    {/* If you have CommentsForm and Comments components, add them here */}
                 </div>
                 <div className="col-span-1 lg:col-span-4">
                     <div className="relative lg:sticky top-8">

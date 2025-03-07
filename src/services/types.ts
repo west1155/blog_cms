@@ -1,7 +1,6 @@
-export type Author = {
+export type AuthorType = {
     bio: string;
     name: string;
-    id: string;
     photo: {
         url: string;
     };
@@ -13,7 +12,7 @@ export type Category = {
 };
 
 export type PostNode = {
-    author: Author;
+    author: AuthorType;
     createdAt: string;
     slug: string;
     title: string;

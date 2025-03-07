@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import moment from 'moment';
 import Link from 'next/link';
-import graphCMSImageLoader from "@/services/graphImageLoader";
+import {graphCMSImageLoader} from "@/services/graphImageLoader";
 import { usePostsStore } from "@/store/store";
 
 type PropsType = {

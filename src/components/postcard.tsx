@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import moment from 'moment';
 import Link from 'next/link';
-import graphImageLoader from "@/services/graphImageLoader";
+import {graphCMSImageLoader} from "@/services/graphImageLoader";
 
 export interface Post {
     title: string;
@@ -17,7 +17,7 @@ export const PostCard = ({post}: { post: Post }) => (
     <div className="bg-white shadow-lg rounded-lg p-0 lg:p-8 pb-12 mb-8">
         <div className="relative overflow-hidden shadow-md pb-80 mb-6">
             <Image
-                loader={graphImageLoader}
+                loader={graphCMSImageLoader}
                 width={800}
                 height={400}
                 alt={''}
@@ -26,12 +26,12 @@ export const PostCard = ({post}: { post: Post }) => (
         </div>
 
         <h1 className="transition duration-500 text-center mb-8 cursor-pointer hover:text-pink-600 text-3xl font-semibold">
-            <Link href={`/src/app/post/${post.slug}`}>{post.title}</Link>
+            <Link href={`/post/${post.slug}`}>{post.title}</Link>
         </h1>
         <div className="block lg:flex text-center items-center justify-center mb-8 w-full">
             <div className="flex justify-center mb-4 lg:mb-0 w-full lg:w-auto mr-8 items-center">
                 <Image
-                    loader={graphImageLoader}
+                    loader={graphCMSImageLoader}
                     alt={post.author.name}
                     height={30}
                     width={30}
